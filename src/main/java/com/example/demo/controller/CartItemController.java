@@ -16,15 +16,31 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
-    // POST /api/cart-items
+    // 1️⃣ POST /api/cart-items → Add item to cart
     @PostMapping
-    public CartItem addItem(@RequestBody CartItem cartItem) {
+    public CartItem addItemToCart(@RequestBody CartItem cartItem) {
         return cartItemService.addItemToCart(cartItem);
     }
 
-    // GET /api/cart-items/cart/{cartId}
+    // 2️⃣ PUT /api/cart-items/{id} → Update item quantity
+    @PutMapping("/{id}")
+    public CartItem updateItem(
+            @PathVariable Long id,
+            @RequestBody CartItem updatedItem
+    ) {
+        updatedItem.setId(id);
+        return cartItemService.updateItem(updatedItem);
+    }
+
+    // 3️⃣ GET /api/cart-items/cart/{cartId} → List items
     @GetMapping("/cart/{cartId}")
-    public List<CartItem> getItems(@PathVariable Long cartId) {
+    public List<CartItem> getItemsByCart(@PathVariable Long cartId) {
         return cartItemService.getItemsForCart(cartId);
+    }
+
+    // 4️⃣ DELETE /api/cart-items/{id} → Remove item
+    @DeleteMapping("/{id}")
+    public void deleteItem(@PathVariable Long id) {
+        cartItemService.removeItem(id);
     }
 }

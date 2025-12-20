@@ -20,7 +20,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    // Constructor injection (required for tests)
+    // Constructor injection (important for tests)
     public CartItemServiceImpl(
             CartItemRepository cartItemRepository,
             CartRepository cartRepository,
@@ -31,51 +31,69 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
+    // ✅ POST → Add item to cart
     @Override
     public CartItem addItemToCart(CartItem item) {
 
-        // ✅ Quantity validation
         if (item.getQuantity() == null || item.getQuantity() <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
-        // ✅ Load Cart
         Cart cart = cartRepository.findById(item.getCart().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
 
-        // ✅ Cart must be active
         if (!cart.getActive()) {
             throw new IllegalArgumentException("Only active carts can accept items");
         }
 
-        // ✅ Load Product
         Product product = productRepository.findById(item.getProduct().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        // ✅ Product must be active
         if (!product.getActive()) {
             throw new IllegalArgumentException("Product is inactive");
         }
 
-        // ✅ Check if CartItem already exists
         Optional<CartItem> existingItem =
                 cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
 
         if (existingItem.isPresent()) {
-            // ✅ Aggregate quantity
             CartItem existing = existingItem.get();
             existing.setQuantity(existing.getQuantity() + item.getQuantity());
             return cartItemRepository.save(existing);
         }
 
-        // ✅ New item
         item.setCart(cart);
         item.setProduct(product);
         return cartItemRepository.save(item);
     }
 
+    // ✅ PUT → Update item quantity
+    @Override
+    public CartItem updateItem(CartItem item) {
+
+        if (item.getQuantity() == null || item.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive");
+        }
+
+        CartItem existing = cartItemRepository.findById(item.getId())
+                .orElseThrow(() -> new EntityNotFoundException("CartItem not found"));
+
+        existing.setQuantity(item.getQuantity());
+        return cartItemRepository.save(existing);
+    }
+
+    // ✅ GET → List items
     @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
+    }
+
+    // ✅ DELETE → Remove item
+    @Override
+    public void removeItem(Long id) {
+        if (!cartItemRepository.existsById(id)) {
+            throw new EntityNotFoundException("CartItem not found");
+        }
+        cartItemRepository.deleteById(id);
     }
 }
