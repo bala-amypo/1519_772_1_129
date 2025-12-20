@@ -4,6 +4,7 @@ import com.example.demo.model.BundleRule;
 import com.example.demo.repository.BundleRuleRepository;
 import com.example.demo.service.BundleRuleService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;  
 
 import java.util.List;
 @Service 
