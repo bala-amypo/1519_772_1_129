@@ -11,7 +11,6 @@ public class BundleRule {
 
     private String ruleName;
 
-    // CSV of product IDs like "10,12"
     @Column(nullable = false)
     private String requiredProductIds;
 
@@ -19,7 +18,6 @@ public class BundleRule {
 
     private Boolean active = true;
 
-    // getters and setters
     public Long getId() {
         return id;
     }
