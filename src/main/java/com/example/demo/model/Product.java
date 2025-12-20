@@ -24,7 +24,6 @@ public class Product {
 
     private Boolean active = true;
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }
