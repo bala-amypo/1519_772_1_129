@@ -8,11 +8,13 @@ import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service   
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -24,7 +26,6 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("SKU already exists");
         }
 
-        
         if (product.getPrice() == null ||
                 product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Price must be positive");
