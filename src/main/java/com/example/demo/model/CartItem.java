@@ -1,36 +1,61 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.model.CartItem;
-import com.example.demo.service.CartItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 
-import java.util.List;
+@Entity
+public class CartItem {
 
-@RestController
-@RequestMapping("/api/cart-items")
-public class CartItemController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Autowired
-    private CartItemService cartItemService;
+    private Long cartId;
+    private Long productId;
+    private int quantity;
+    private BigDecimal price;
 
-    @PostMapping
-    public CartItem addCartItem(@RequestBody CartItem cartItem) {
-        return cartItemService.addCartItem(cartItem);
+    // ===== Getters =====
+
+    public Long getId() {
+        return id;
     }
 
-    @PutMapping("/{id}")
-    public CartItem updateCartItem(@PathVariable Long id, @RequestBody CartItem cartItem) {
-        return cartItemService.updateCartItem(id, cartItem);
+    public Long getCartId() {
+        return cartId;
     }
 
-    @GetMapping("/cart/{cartId}")
-    public List<CartItem> getCartItems(@PathVariable Long cartId) {
-        return cartItemService.getCartItemsByCartId(cartId);
+    public Long getProductId() {
+        return productId;
     }
 
-    @DeleteMapping("/{id}")
-    public void removeCartItem(@PathVariable Long id) {
-        cartItemService.removeCartItem(id);
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    // ===== Setters =====
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }
