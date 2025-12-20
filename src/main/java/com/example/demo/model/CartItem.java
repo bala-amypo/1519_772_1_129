@@ -1,49 +1,36 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.model.CartItem;
+import com.example.demo.service.CartItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-public class CartItem {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@RestController
+@RequestMapping("/api/cart-items")
+public class CartItemController {
 
-    @ManyToOne(optional = false)
-    private Cart cart;
+    @Autowired
+    private CartItemService cartItemService;
 
-    @ManyToOne(optional = false)
-    private Product product;
-
-    private Integer quantity;
-
-    // getters & setters
-
-    public Long getId() {
-        return id;
+    @PostMapping
+    public CartItem addCartItem(@RequestBody CartItem cartItem) {
+        return cartItemService.addCartItem(cartItem);
     }
 
-    public Cart getCart() {
-        return cart;
+    @PutMapping("/{id}")
+    public CartItem updateCartItem(@PathVariable Long id, @RequestBody CartItem cartItem) {
+        return cartItemService.updateCartItem(id, cartItem);
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    @GetMapping("/cart/{cartId}")
+    public List<CartItem> getCartItems(@PathVariable Long cartId) {
+        return cartItemService.getCartItemsByCartId(cartId);
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    @DeleteMapping("/{id}")
+    public void removeCartItem(@PathVariable Long id) {
+        cartItemService.removeCartItem(id);
     }
 }

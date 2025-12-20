@@ -1,50 +1,40 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Cart;
-import com.example.demo.repository.CartRepository;
-import com.example.demo.service.CartService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.demo.model.CartItem;
+import com.example.demo.repository.CartItemRepository;
+import com.example.demo.service.CartItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service   
-public class CartServiceImpl implements CartService {
+import java.util.List;
 
-    private final CartRepository cartRepository;
+@Service
+public class CartItemServiceImpl implements CartItemService {
 
-    public CartServiceImpl(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Override
+    public CartItem addCartItem(CartItem cartItem) {
+        return cartItemRepository.save(cartItem);
     }
 
     @Override
-    public Cart createCart(Long userId) {
-
-        return cartRepository.findByUserIdAndActiveTrue(userId)
-                .orElseGet(() -> {
-                    Cart cart = new Cart();
-                    cart.setUserId(userId);
-                    cart.setActive(true);
-                    return cartRepository.save(cart);
-                });
+    public CartItem updateCartItem(Long id, CartItem cartItem) {
+        CartItem existingItem = cartItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("CartItem not found"));
+        existingItem.setProductId(cartItem.getProductId());
+        existingItem.setQuantity(cartItem.getQuantity());
+        return cartItemRepository.save(existingItem);
     }
 
     @Override
-    public Cart getCartById(Long id) {
-        return cartRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Cart not found"));
+    public List<CartItem> getCartItemsByCartId(Long cartId) {
+        return cartItemRepository.findByCartId(cartId);
     }
 
     @Override
-    public Cart getActiveCartForUser(Long userId) {
-        return cartRepository.findByUserIdAndActiveTrue(userId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Active cart not found"));
-    }
-
-    @Override
-    public void deactivateCart(Long id) {
-        Cart cart = getCartById(id);
-        cart.setActive(false);
-        cartRepository.save(cart);
+    public void removeCartItem(Long id) {
+        cartItemRepository.deleteById(id);
     }
 }
