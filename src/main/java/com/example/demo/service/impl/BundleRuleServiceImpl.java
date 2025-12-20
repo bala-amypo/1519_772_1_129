@@ -6,7 +6,7 @@ import com.example.demo.service.BundleRuleService;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
-
+@Service 
 public class BundleRuleServiceImpl implements BundleRuleService {
 
     private final BundleRuleRepository bundleRuleRepository;
