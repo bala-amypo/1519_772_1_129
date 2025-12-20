@@ -20,7 +20,6 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    // Constructor injection (important for tests)
     public CartItemServiceImpl(
             CartItemRepository cartItemRepository,
             CartRepository cartRepository,
@@ -31,7 +30,7 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
-    // ✅ POST → Add item to cart
+    // ✅ Add item to cart
     @Override
     public CartItem addItemToCart(CartItem item) {
 
@@ -53,13 +52,13 @@ public class CartItemServiceImpl implements CartItemService {
             throw new IllegalArgumentException("Product is inactive");
         }
 
-        Optional<CartItem> existingItem =
+        Optional<CartItem> existing =
                 cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
 
-        if (existingItem.isPresent()) {
-            CartItem existing = existingItem.get();
-            existing.setQuantity(existing.getQuantity() + item.getQuantity());
-            return cartItemRepository.save(existing);
+        if (existing.isPresent()) {
+            CartItem existingItem = existing.get();
+            existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
+            return cartItemRepository.save(existingItem);
         }
 
         item.setCart(cart);
@@ -67,28 +66,28 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.save(item);
     }
 
-    // ✅ PUT → Update item quantity
+    // ✅ Update item quantity
     @Override
-    public CartItem updateItem(CartItem item) {
+    public CartItem updateItem(Long id, CartItem item) {
 
         if (item.getQuantity() == null || item.getQuantity() <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
-        CartItem existing = cartItemRepository.findById(item.getId())
+        CartItem existing = cartItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("CartItem not found"));
 
         existing.setQuantity(item.getQuantity());
         return cartItemRepository.save(existing);
     }
 
-    // ✅ GET → List items
+    // ✅ List items
     @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
 
-    // ✅ DELETE → Remove item
+    // ✅ Remove item
     @Override
     public void removeItem(Long id) {
         if (!cartItemRepository.existsById(id)) {
