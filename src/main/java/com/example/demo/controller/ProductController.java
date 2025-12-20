@@ -1,74 +1,44 @@
-package com.example.demo.service;
+package com.example.demo.controller;
 
-import com.example.demo.model.Product;
-import com.example.demo.repository.ProductRepository;
-
-
-import jakarta.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
 import java.util.List;
 
-public class ProductServiceImpl implements ProductService {
+import org.springframework.web.bind.annotation.*;
 
-    private final ProductRepository productRepository;
+import com.example.demo.model.Product;
+import com.example.demo.service.ProductService;
 
-    
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+@RestController
+@RequestMapping("/api/products")
+public class ProductController {
+
+    private final ProductService productService;
+
+    // Constructor Injection
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @Override
-    public Product createProduct(Product product) {
-
-        
-        if (productRepository.findBySku(product.getSku()).isPresent()) {
-            throw new IllegalArgumentException("SKU already exists");
-        }
-
-        
-        if (product.getPrice() == null ||
-                product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Price must be positive");
-        }
-
-        product.setActive(true);
-        return productRepository.save(product);
+    // Create product
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
-    @Override
-    public Product updateProduct(Long id, Product product) {
-
-        Product existing = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Product not found"));
-
-        if (product.getPrice() != null &&
-                product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Price must be positive");
-        }
-
-        existing.setName(product.getName());
-        existing.setPrice(product.getPrice());
-
-        return productRepository.save(existing);
-    }
-
-    @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Product not found"));
-    }
-
-    @Override
+    // Get all products
+    @GetMapping
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productService.getAllProducts();
     }
 
-    @Override
-    public void deactivateProduct(Long id) {
-        Product product = getProductById(id);
-        product.setActive(false);
-        productRepository.save(product);
+    // Get product by id
+    @GetMapping("/{id}")
+    public Product getProduct(@PathVariable Long id) {
+        return productService.getProductById(id);
+    }
+
+    // Deactivate product
+    @PutMapping("/{id}/deactivate")
+    public void deactivateProduct(@PathVariable Long id) {
+        productService.deactivateProduct(id);
     }
 }
