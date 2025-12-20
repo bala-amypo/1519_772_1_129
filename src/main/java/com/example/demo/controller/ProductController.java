@@ -1,44 +1,45 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.Product;
 import com.example.demo.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Product Controller")
 public class ProductController {
 
     private final ProductService productService;
 
-   
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
- 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product create(@RequestBody Product product) {
         return productService.createProduct(product);
     }
 
-  
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    @PutMapping("/{id}")
+    public Product update(@PathVariable Long id, @RequestBody Product product) {
+        return productService.updateProduct(id, product);
     }
 
-  
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public Product get(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
- 
+    @GetMapping
+    public List<Product> list() {
+        return productService.getAllProducts();
+    }
+
     @PutMapping("/{id}/deactivate")
-    public void deactivateProduct(@PathVariable Long id) {
+    public void deactivate(@PathVariable Long id) {
         productService.deactivateProduct(id);
     }
 }
