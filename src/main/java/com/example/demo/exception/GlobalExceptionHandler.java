@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     // =========================
     // PRODUCT
     // =========================
-    @ExceptionHandler(ProductException.class)
+    @ExceptionHandler(GlobalExceptionHandler.ProductException.class)
     public ResponseEntity<Map<String, Object>> handleProduct(ProductException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     // =========================
     // BUNDLE RULE
     // =========================
-    @ExceptionHandler(BundleRuleException.class)
+    @ExceptionHandler(GlobalExceptionHandler.BundleRuleException.class)
     public ResponseEntity<Map<String, Object>> handleBundle(BundleRuleException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     // =========================
     // CART
     // =========================
-    @ExceptionHandler(CartException.class)
+    @ExceptionHandler(GlobalExceptionHandler.CartException.class)
     public ResponseEntity<Map<String, Object>> handleCart(CartException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     // =========================
     // CART ITEM
     // =========================
-    @ExceptionHandler(CartItemException.class)
+    @ExceptionHandler(GlobalExceptionHandler.CartItemException.class)
     public ResponseEntity<Map<String, Object>> handleCartItem(CartItemException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
@@ -48,13 +48,13 @@ public class GlobalExceptionHandler {
     // =========================
     // DISCOUNT
     // =========================
-    @ExceptionHandler(DiscountException.class)
+    @ExceptionHandler(GlobalExceptionHandler.DiscountException.class)
     public ResponseEntity<Map<String, Object>> handleDiscount(DiscountException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     // =========================
-    // ENTITY NOT FOUND (JPA)
+    // ENTITY NOT FOUND
     // =========================
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(EntityNotFoundException ex) {
@@ -62,11 +62,14 @@ public class GlobalExceptionHandler {
     }
 
     // =========================
-    // GENERIC EXCEPTION (500)
+    // FALLBACK (500)
     // =========================
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleAll(Exception ex) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+        );
     }
 
     // =========================
@@ -81,7 +84,7 @@ public class GlobalExceptionHandler {
     }
 
     // =====================================================
-    // ALL CUSTOM EXCEPTIONS — INSIDE SAME FILE
+    // INNER CUSTOM EXCEPTIONS (ONE FILE ONLY)
     // =====================================================
 
     public static class ProductException extends RuntimeException {
