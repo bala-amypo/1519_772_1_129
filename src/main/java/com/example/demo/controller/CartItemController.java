@@ -16,13 +16,12 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
-    // POST /api/cart-items → Add item to cart
     @PostMapping
     public CartItem addItem(@RequestBody CartItem cartItem) {
         return cartItemService.addItemToCart(cartItem);
     }
 
-    // PUT /api/cart-items/{id} → Update item quantity
+
     @PutMapping("/{id}")
     public CartItem updateItem(
             @PathVariable Long id,
@@ -31,7 +30,7 @@ public class CartItemController {
         return cartItemService.updateItem(id, cartItem);
     }
 
-    // GET /api/cart-items/cart/{cartId} → List items
+
     @GetMapping("/cart/{cartId}")
     public List<CartItem> getItems(@PathVariable Long cartId) {
         return cartItemService.getItemsForCart(cartId);

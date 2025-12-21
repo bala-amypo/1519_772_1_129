@@ -31,7 +31,6 @@ public class DiscountServiceImpl implements DiscountService {
         this.cartItemRepo = cartItemRepo;
     }
 
-    // ✅ POST /evaluate/{cartId}
     @Override
     public List<DiscountApplication> evaluateDiscounts(Long cartId) {
 
@@ -91,14 +90,12 @@ public class DiscountServiceImpl implements DiscountService {
         return result;
     }
 
-    // ✅ GET /{id}
     @Override
     public DiscountApplication getById(Long id) {
         return discountRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Discount not found"));
     }
 
-    // ✅ GET /cart/{cartId}
     @Override
     public List<DiscountApplication> getByCartId(Long cartId) {
         return discountRepo.findByCartId(cartId);

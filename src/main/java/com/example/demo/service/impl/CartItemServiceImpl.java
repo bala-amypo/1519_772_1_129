@@ -30,7 +30,6 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
-    // ✅ Add item to cart
     @Override
     public CartItem addItemToCart(CartItem item) {
 
@@ -66,7 +65,7 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.save(item);
     }
 
-    // ✅ Update item quantity
+   
     @Override
     public CartItem updateItem(Long id, CartItem item) {
 
@@ -81,13 +80,13 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.save(existing);
     }
 
-    // ✅ List items
+
     @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
 
-    // ✅ Remove item
+
     @Override
     public void removeItem(Long id) {
         if (!cartItemRepository.existsById(id)) {
