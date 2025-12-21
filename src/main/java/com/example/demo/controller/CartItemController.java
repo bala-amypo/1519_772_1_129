@@ -36,7 +36,6 @@ public class CartItemController {
         return cartItemService.getItemsForCart(cartId);
     }
 
-    // DELETE /api/cart-items/{id} → Remove item
     @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable Long id) {
         cartItemService.removeItem(id);
