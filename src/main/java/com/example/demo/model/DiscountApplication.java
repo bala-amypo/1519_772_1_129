@@ -22,7 +22,7 @@ public class DiscountApplication {
 
     private LocalDateTime appliedAt;
 
-    // Getters & Setters
+ 
     public Long getId() {
         return id;
     }
