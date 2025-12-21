@@ -12,13 +12,13 @@ public class BundleRule {
     private String ruleName;
 
     @Column(nullable = false)
-    private String requiredProductIds; // CSV: "1,2,3"
+    private String requiredProductIds; 
 
     private Double discountPercentage;
 
     private Boolean active = true;
 
-    // getters & setters
+   
 
     public Long getId() {
         return id;
