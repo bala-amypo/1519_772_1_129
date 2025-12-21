@@ -13,57 +13,39 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // =========================
-    // PRODUCT
-    // =========================
     @ExceptionHandler(GlobalExceptionHandler.ProductException.class)
     public ResponseEntity<Map<String, Object>> handleProduct(ProductException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // =========================
-    // BUNDLE RULE
-    // =========================
+
     @ExceptionHandler(GlobalExceptionHandler.BundleRuleException.class)
     public ResponseEntity<Map<String, Object>> handleBundle(BundleRuleException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // =========================
-    // CART
-    // =========================
     @ExceptionHandler(GlobalExceptionHandler.CartException.class)
     public ResponseEntity<Map<String, Object>> handleCart(CartException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // =========================
-    // CART ITEM
-    // =========================
     @ExceptionHandler(GlobalExceptionHandler.CartItemException.class)
     public ResponseEntity<Map<String, Object>> handleCartItem(CartItemException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // =========================
-    // DISCOUNT
-    // =========================
     @ExceptionHandler(GlobalExceptionHandler.DiscountException.class)
     public ResponseEntity<Map<String, Object>> handleDiscount(DiscountException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // =========================
-    // ENTITY NOT FOUND
-    // =========================
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(EntityNotFoundException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // =========================
-    // FALLBACK (500)
-    // =========================
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleAll(Exception ex) {
         return buildResponse(
@@ -72,14 +54,15 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // =========================
-    // RESPONSE BUILDER
-    // =========================
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("error", message);
+        return new ResponseEntity<>(body, status);
+    }
 
 
-    // =====================================================
-    // INNER CUSTOM EXCEPTIONS (ONE FILE ONLY)
-    // =====================================================
 
     public static class ProductException extends RuntimeException {
         public ProductException(String message) {
