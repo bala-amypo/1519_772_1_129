@@ -75,13 +75,7 @@ public class GlobalExceptionHandler {
     // =========================
     // RESPONSE BUILDER
     // =========================
-    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", status.value());
-        body.put("error", message);
-        return new ResponseEntity<>(body, status);
-    }
+
 
     // =====================================================
     // INNER CUSTOM EXCEPTIONS (ONE FILE ONLY)
