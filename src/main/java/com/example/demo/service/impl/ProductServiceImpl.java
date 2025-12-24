@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -37,22 +38,25 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, Product updated) {
         Product existing = getProductById(id);
+        existing.setSku(updated.getSku());
         existing.setName(updated.getName());
         existing.setCategory(updated.getCategory());
         existing.setPrice(updated.getPrice());
+        existing.setActive(updated.getActive());
         return productRepository.save(existing);
     }
-
-  
-
 
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() ->
-                        new jakarta.persistence.EntityNotFoundException("Product not found"));
+                        new EntityNotFoundException("Product not found"));
     }
 
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 
     @Override
     public void deactivateProduct(Long id) {
