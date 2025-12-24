@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "carts")
@@ -11,24 +10,11 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private Long userId;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Boolean active = true;   
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    
 
     public Long getId() {
         return id;
@@ -46,19 +32,11 @@ public class Cart {
         this.userId = userId;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
