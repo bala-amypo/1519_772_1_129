@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.controller.dto;
 
 public class AuthResponse {
 
@@ -10,6 +10,8 @@ public class AuthResponse {
     public AuthResponse(String token) {
         this.token = token;
     }
+
+    // ----- Getter and Setter -----
 
     public String getToken() {
         return token;
