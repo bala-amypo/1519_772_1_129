@@ -43,12 +43,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(existing);
     }
 
-    @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Product not found"));
-    }
+  
 
 
     @Override
@@ -56,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() ->
                         new jakarta.persistence.EntityNotFoundException("Product not found"));
-}
+    }
 
 
     @Override

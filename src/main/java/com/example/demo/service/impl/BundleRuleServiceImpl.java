@@ -14,11 +14,25 @@ public class BundleRuleServiceImpl implements BundleRuleService {
         this.bundleRuleRepository = bundleRuleRepository;
     }
 
+    
+
     @Override
     public BundleRule createRule(BundleRule rule) {
-        validateRule(rule);
+        Double discount = rule.getDiscountPercentage();
+        if (discount == null || discount < 0 || discount > 100) {
+            throw new IllegalArgumentException(
+                    "Discount percentage must be between 0 and 100");
+        }
+
+        String required = rule.getRequiredProductIds();
+        if (required == null || required.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "requiredProductIds cannot be empty");
+        }
+
         return bundleRuleRepository.save(rule);
     }
+
 
     private void validateRule(BundleRule rule) {
         // discountPercentage must be between 0 and 100
