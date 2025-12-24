@@ -44,12 +44,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(existing);
     }
 
+
+
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found"));
-    }
+            .orElseThrow(() ->
+                    new IllegalArgumentException("Product not found"));
+}
 
     @Override
     public List<Product> getAllProducts() {
