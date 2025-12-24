@@ -29,8 +29,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = new User();
         user.setEmail(email);
-        // for tests, plain password is enough; no PasswordEncoder needed
-        user.setPassword(password);
+        user.setPassword(password);   // plain for tests
         user.setRole(role != null ? role : "ROLE_USER");
 
         userRepository.save(user);
@@ -39,8 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(AuthRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() ->
-                        new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         if (!user.getPassword().equals(request.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
