@@ -34,7 +34,7 @@ public class DiscountServiceImpl implements DiscountService {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        // clear previous applications for this cart (optional; depends on tests)
+        // Remove existing discount applications for this cart (optional but common)
         List<DiscountApplication> existing = discountApplicationRepository.findByCart(cart);
         discountApplicationRepository.deleteAll(existing);
 
@@ -66,11 +66,18 @@ public class DiscountServiceImpl implements DiscountService {
         return discountApplicationRepository.findByCartId(cartId);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public DiscountApplication getApplicationById(Long id) {
+        return discountApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Discount application not found"));
+    }
 
+    // ---------- Helper methods ----------
 
     private boolean cartContainsAllRequiredProducts(List<CartItem> items,
                                                     BundleRule rule) {
-      
+        // requiredProductIds stored as CSV string, e.g. "1,2,3"
         String csv = rule.getRequiredProductIds();
         if (csv == null || csv.isBlank()) {
             return false;
@@ -90,7 +97,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     private BigDecimal calculateDiscountAmount(List<CartItem> items,
                                                BundleRule rule) {
-        // simple logic: discount on total price of qualifying products
+        // Basic implementation: discountPercentage applied on total price
         String[] ids = rule.getRequiredProductIds().split(",");
         BigDecimal total = BigDecimal.ZERO;
 
@@ -105,9 +112,9 @@ public class DiscountServiceImpl implements DiscountService {
             }
         }
 
-        BigDecimal percentage =
-                BigDecimal.valueOf(rule.getDiscountPercentage()) // 0–100
-                        .divide(BigDecimal.valueOf(100));
+        BigDecimal percentage = BigDecimal
+                .valueOf(rule.getDiscountPercentage()) // 0–100
+                .divide(BigDecimal.valueOf(100));
 
         return total.multiply(percentage);
     }

@@ -12,12 +12,11 @@ public class DiscountApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many discount applications belong to one cart
+  
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    // Bundle rule that was applied
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "bundle_rule_id", nullable = false)
     private BundleRule bundleRule;
@@ -33,7 +32,6 @@ public class DiscountApplication {
         this.appliedAt = Instant.now();
     }
 
-    // ----- Getters and Setters -----
 
     public Long getId() {
         return id;

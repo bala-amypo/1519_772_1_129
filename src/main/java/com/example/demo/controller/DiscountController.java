@@ -19,7 +19,7 @@ public class DiscountController {
         this.discountService = discountService;
     }
 
-    // POST /api/discounts/evaluate/{cartId}
+    // POST /api/discounts/evaluate/{cartId} – Evaluate discounts
     @PostMapping("/evaluate/{cartId}")
     public ResponseEntity<List<DiscountApplication>> evaluate(
             @PathVariable Long cartId) {
@@ -27,7 +27,14 @@ public class DiscountController {
         return ResponseEntity.ok(apps);
     }
 
-    // GET /api/discounts/cart/{cartId}
+    // GET /api/discounts/{id} – Get discount application
+    @GetMapping("/{id}")
+    public ResponseEntity<DiscountApplication> getById(@PathVariable Long id) {
+        DiscountApplication app = discountService.getApplicationById(id);
+        return ResponseEntity.ok(app);
+    }
+
+    // GET /api/discounts/cart/{cartId} – Get discounts for cart
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<List<DiscountApplication>> getForCart(
             @PathVariable Long cartId) {
