@@ -12,5 +12,11 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     List<CartItem> findByCartId(Long cartId);
 
-    List<CartItem> findByCartIdAndQuantityGreaterThanEqual(Long cartId, Integer minQuantity);
+    // real Spring Data method
+    List<CartItem> findByCartIdAndQuantityGreaterThanEqual(Long cartId, Integer quantity);
+
+    // alias method expected by tests
+    default List<CartItem> findByCartIdAndMinQuantity(Long cartId, Integer minQuantity) {
+        return findByCartIdAndQuantityGreaterThanEqual(cartId, minQuantity);
+    }
 }
