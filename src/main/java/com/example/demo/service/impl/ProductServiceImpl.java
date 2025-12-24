@@ -50,6 +50,15 @@ public class ProductServiceImpl implements ProductService {
                         new EntityNotFoundException("Product not found"));
     }
 
+
+    @Override
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new jakarta.persistence.EntityNotFoundException("Product not found"));
+}
+
+
     @Override
     public void deactivateProduct(Long id) {
         Product product = getProductById(id);
