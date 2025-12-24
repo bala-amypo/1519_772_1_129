@@ -3,18 +3,16 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
+import com.example.demo.exception.ResourceNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-@Service   
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    // ⚠️ Constructor injection ONLY (test requirement)
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -26,29 +24,22 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("SKU already exists");
         }
 
-        if (product.getPrice() == null ||
-                product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Price must be positive");
+        if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero");
         }
 
-        product.setActive(true);
         return productRepository.save(product);
     }
 
     @Override
     public Product updateProduct(Long id, Product product) {
 
-        Product existing = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Product not found"));
-
-        if (product.getPrice() != null &&
-                product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Price must be positive");
-        }
+        Product existing = getProductById(id);
 
         existing.setName(product.getName());
+        existing.setCategory(product.getCategory());
         existing.setPrice(product.getPrice());
+        existing.setSku(product.getSku());
 
         return productRepository.save(existing);
     }
@@ -57,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Product not found"));
+                        new ResourceNotFoundException("Product not found"));
     }
 
     @Override
@@ -72,4 +63,3 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 }
-

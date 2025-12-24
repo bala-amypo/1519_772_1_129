@@ -9,11 +9,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@Tag(name = "Product Controller")
+@Tag(name = "Products")
 public class ProductController {
 
     private final ProductService productService;
 
+    // Constructor injection
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -24,17 +25,18 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
+    public Product update(@PathVariable Long id,
+                          @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
     @GetMapping("/{id}")
-    public Product get(@PathVariable Long id) {
+    public Product getById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
     @GetMapping
-    public List<Product> list() {
+    public List<Product> getAll() {
         return productService.getAllProducts();
     }
 
