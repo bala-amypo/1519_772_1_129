@@ -6,15 +6,11 @@ import com.example.demo.model.Product;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.ProductRepository;
-import com.example.demo.service.CartItemService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
-@Service
-@Transactional
-public class CartItemServiceImpl implements CartItemService {
+public class CartItemServiceImpl {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
@@ -28,57 +24,40 @@ public class CartItemServiceImpl implements CartItemService {
         this.productRepository = productRepository;
     }
 
-    @Override
-    public CartItem addItem(Long cartId, Long productId, Integer quantity) {
-        if (quantity == null || quantity <= 0) {
+    public CartItem addItemToCart(CartItem item) {
+        if (item.getQuantity() == null || item.getQuantity() <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Long cartId = item.getCart().getId();
+        Long productId = item.getProduct().getId();
 
-        // if same product already exists in cart, just update quantity
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        if (Boolean.FALSE.equals(cart.getActive())) {
+            throw new IllegalArgumentException("Only active carts can accept items");
+        }
+
+        if (Boolean.FALSE.equals(product.getActive())) {
+            throw new IllegalArgumentException("Product not active");
+        }
+
         return cartItemRepository.findByCartIdAndProductId(cartId, productId)
                 .map(existing -> {
-                    existing.setQuantity(existing.getQuantity() + quantity);
+                    existing.setQuantity(existing.getQuantity() + item.getQuantity());
                     return cartItemRepository.save(existing);
                 })
                 .orElseGet(() -> {
-                    CartItem item = new CartItem();
                     item.setCart(cart);
                     item.setProduct(product);
-                    item.setQuantity(quantity);
                     return cartItemRepository.save(item);
                 });
     }
 
-    @Override
-    public CartItem updateItem(Long cartItemId, Integer quantity) {
-        if (quantity == null || quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
-
-        CartItem item = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
-        item.setQuantity(quantity);
-        return cartItemRepository.save(item);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<CartItem> getItemsForCart(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-        return cartItemRepository.findByCart(cart);
-    }
-
-    @Override
-    public void removeItem(Long cartItemId) {
-        if (!cartItemRepository.existsById(cartItemId)) {
-            throw new RuntimeException("Cart item not found");
-        }
-        cartItemRepository.deleteById(cartItemId);
+        return cartItemRepository.findByCartId(cartId);
     }
 }
