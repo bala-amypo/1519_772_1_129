@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
-import com.example.demo.exception.ResourceNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +11,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    // ⚠️ Constructor injection ONLY (test requirement)
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -44,14 +42,12 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(existing);
     }
 
-
-
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-            .orElseThrow(() ->
-                    new IllegalArgumentException("Product not found"));
-}
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Product not found"));
+    }
 
     @Override
     public List<Product> getAllProducts() {
