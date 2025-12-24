@@ -1,11 +1,9 @@
-package com.example.demo.controller.dto;
+package com.example.demo.dto;
 
 public class AuthRequest {
 
     private String email;
     private String password;
-
-    // ----- Getters and Setters -----
 
     public String getEmail() {
         return email;

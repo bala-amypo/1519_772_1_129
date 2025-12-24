@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.dto.AuthRequest;
-import com.example.demo.controller.dto.AuthResponse;
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 
 public interface AuthService {
 
