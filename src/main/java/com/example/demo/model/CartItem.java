@@ -11,12 +11,11 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many items belong to one cart
+    
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    // Each item refers to one product
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -48,7 +47,7 @@ public class CartItem {
         this.updatedAt = Instant.now();
     }
 
-    // ----- Getters and Setters -----
+   
 
     public Long getId() {
         return id;
