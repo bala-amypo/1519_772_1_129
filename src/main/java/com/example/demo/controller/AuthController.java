@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.dto.AuthRequest;
-import com.example.demo.controller.dto.AuthResponse;
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
