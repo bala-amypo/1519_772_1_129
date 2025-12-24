@@ -7,6 +7,7 @@ import com.example.demo.service.ProductService;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
