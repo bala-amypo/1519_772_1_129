@@ -6,11 +6,7 @@ import java.util.List;
 
 public interface CartItemService {
 
-    CartItem addItem(Long cartId, Long productId, Integer quantity);
-
-    CartItem updateItem(Long cartItemId, Integer quantity);
+    CartItem addItemToCart(CartItem item);
 
     List<CartItem> getItemsForCart(Long cartId);
-
-    void removeItem(Long cartItemId);
 }

@@ -6,11 +6,14 @@ import com.example.demo.model.Product;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class CartItemServiceImpl {
+@Service   // required so Spring creates the bean
+public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
@@ -24,6 +27,7 @@ public class CartItemServiceImpl {
         this.productRepository = productRepository;
     }
 
+    @Override
     public CartItem addItemToCart(CartItem item) {
         if (item.getQuantity() == null || item.getQuantity() <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
@@ -41,10 +45,6 @@ public class CartItemServiceImpl {
             throw new IllegalArgumentException("Only active carts can accept items");
         }
 
-        if (Boolean.FALSE.equals(product.getActive())) {
-            throw new IllegalArgumentException("Product not active");
-        }
-
         return cartItemRepository.findByCartIdAndProductId(cartId, productId)
                 .map(existing -> {
                     existing.setQuantity(existing.getQuantity() + item.getQuantity());
@@ -57,6 +57,7 @@ public class CartItemServiceImpl {
                 });
     }
 
+    @Override
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
