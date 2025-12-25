@@ -17,13 +17,32 @@ public class CartItemController {
         this.cartItemService = cartItemService;
     }
 
+    // POST /api/cart-items – Add item to cart
     @PostMapping
     public ResponseEntity<CartItem> addItem(@RequestBody CartItem item) {
-        return ResponseEntity.ok(cartItemService.addItemToCart(item));
+        CartItem saved = cartItemService.addItemToCart(item);
+        return ResponseEntity.ok(saved);
     }
 
+    // PUT /api/cart-items/{id} – Update item quantity
+    @PutMapping("/{id}")
+    public ResponseEntity<CartItem> updateItem(@PathVariable Long id,
+                                               @RequestBody CartItem item) {
+        item.setId(id);
+        CartItem updated = cartItemService.updateItem(item); // add wrapper in service if needed
+        return ResponseEntity.ok(updated);
+    }
+
+    // GET /api/cart-items/cart/{cartId} – List items
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<List<CartItem>> getItems(@PathVariable Long cartId) {
         return ResponseEntity.ok(cartItemService.getItemsForCart(cartId));
+    }
+
+    // DELETE /api/cart-items/{id} – Remove item
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeItem(@PathVariable Long id) {
+        cartItemService.removeItem(id); // add wrapper in service if needed
+        return ResponseEntity.noContent().build();
     }
 }

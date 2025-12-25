@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // required so Spring creates the bean
+@Service  
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -61,4 +61,19 @@ public class CartItemServiceImpl implements CartItemService {
     public List<CartItem> getItemsForCart(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
+
+  
+    @Override
+    public CartItem updateItem(CartItem item) {
+        CartItem existing = cartItemRepository.findById(item.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
+        existing.setQuantity(item.getQuantity());
+        return addItemToCart(existing); 
+    }
+
+    @Override
+    public void removeItem(Long id) {
+        cartItemRepository.deleteById(id);
+    }
+
 }

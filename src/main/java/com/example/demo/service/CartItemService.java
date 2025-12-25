@@ -9,4 +9,10 @@ public interface CartItemService {
     CartItem addItemToCart(CartItem item);
 
     List<CartItem> getItemsForCart(Long cartId);
+
+   
+    CartItem updateItem(CartItem item);
+
+    void removeItem(Long id);
+
 }

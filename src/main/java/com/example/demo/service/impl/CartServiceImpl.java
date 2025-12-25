@@ -34,19 +34,19 @@ public class CartServiceImpl implements CartService {
     }
 
 
-    // in CartServiceImpl
+    
     @Override
     public Cart getCartById(Long id) {
         return cartRepository.findById(id)
                 .orElseThrow(() ->
-                         new EntityNotFoundException("Cart not found"));
-}
+                        new EntityNotFoundException("Cart not found"));
+    }
 
-@Override
-public void deactivateCart(Long id) {
-    Cart cart = getCartById(id);
-    cart.setActive(false);
-    cartRepository.save(cart);
-}
+    @Override
+    public void deactivateCart(Long id) {
+        Cart cart = getCartById(id);
+        cart.setActive(false);
+        cartRepository.save(cart);
+    }
 
 }
