@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
 import com.example.demo.service.CartService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,23 +15,13 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping("/{userId}")
-    public Cart createCart(@PathVariable Long userId) {
-        return cartService.createCart(userId);
-    }
-
-    @GetMapping("/{id}")
-    public Cart getCartById(@PathVariable Long id) {
-        return cartService.getCartById(id);
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<Cart> createCart(@PathVariable Long userId) {
+        return ResponseEntity.ok(cartService.createCart(userId));
     }
 
     @GetMapping("/user/{userId}")
-    public Cart getCartByUser(@PathVariable Long userId) {
-        return cartService.getCartByUserId(userId);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deactivateCart(@PathVariable Long id) {
-        cartService.deactivateCart(id);
+    public ResponseEntity<Cart> getActiveCart(@PathVariable Long userId) {
+        return ResponseEntity.ok(cartService.getActiveCartForUser(userId));
     }
 }
