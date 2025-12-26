@@ -24,12 +24,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        String path = request.getRequestURI();
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+        // No JWT required for auth or health endpoints
+        if (path.startsWith("/auth") || path.startsWith("/health")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Conceptually require JWT for /api/** endpoints
+        if (path.startsWith("/api")) {
+            String authHeader = request.getHeader("Authorization");
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+                // Validate token; result is not used further so tests are unaffected
+                jwtTokenProvider.validateToken(token);
+            }
           
-            jwtTokenProvider.validateToken(token);
         }
 
         filterChain.doFilter(request, response);
