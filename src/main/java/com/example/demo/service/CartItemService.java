@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.CartItem;
-
 import java.util.List;
 
 public interface CartItemService {
@@ -10,9 +9,7 @@ public interface CartItemService {
 
     List<CartItem> getItemsForCart(Long cartId);
 
-   
     CartItem updateItem(CartItem item);
 
     void removeItem(Long id);
-
 }

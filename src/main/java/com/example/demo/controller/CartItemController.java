@@ -29,7 +29,7 @@ public class CartItemController {
     public ResponseEntity<CartItem> updateItem(@PathVariable Long id,
                                                @RequestBody CartItem item) {
         item.setId(id);
-        CartItem updated = cartItemService.updateItem(item); // add wrapper in service if needed
+        CartItem updated = cartItemService.updateItem(item);
         return ResponseEntity.ok(updated);
     }
 
@@ -42,7 +42,7 @@ public class CartItemController {
     // DELETE /api/cart-items/{id} – Remove item
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeItem(@PathVariable Long id) {
-        cartItemService.removeItem(id); // add wrapper in service if needed
+        cartItemService.removeItem(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service  
+@Service
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
@@ -62,18 +62,16 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemRepository.findByCartId(cartId);
     }
 
-  
     @Override
     public CartItem updateItem(CartItem item) {
         CartItem existing = cartItemRepository.findById(item.getId())
-            .orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Cart item not found"));
         existing.setQuantity(item.getQuantity());
-        return addItemToCart(existing); 
+        return addItemToCart(existing);
     }
 
     @Override
     public void removeItem(Long id) {
         cartItemRepository.deleteById(id);
     }
-
 }
