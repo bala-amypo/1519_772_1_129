@@ -26,7 +26,6 @@ public class DiscountServiceImpl implements DiscountService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
-    // constructor in the exact order tests expect
     public DiscountServiceImpl(DiscountApplicationRepository discountApplicationRepository,
                                BundleRuleRepository bundleRuleRepository,
                                CartRepository cartRepository,
@@ -42,15 +41,14 @@ public class DiscountServiceImpl implements DiscountService {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
 
-        // if cart is inactive, return empty list (tests check this)
         if (Boolean.FALSE.equals(cart.getActive())) {
             return List.of();
         }
 
-        // clear previous discount applications first
+    
         discountApplicationRepository.deleteByCartId(cartId);
 
-        // load current items and active rules
+        
         List<CartItem> items = cartItemRepository.findByCartId(cartId);
         List<BundleRule> activeRules = bundleRuleRepository.findByActiveTrue();
 
@@ -88,7 +86,7 @@ public class DiscountServiceImpl implements DiscountService {
                 .orElseThrow(() -> new EntityNotFoundException("Discount application not found"));
     }
 
-    // ---------- helper methods ----------
+
 
     private boolean cartContainsAllRequiredProducts(List<CartItem> items,
                                                     BundleRule rule) {
@@ -126,7 +124,7 @@ public class DiscountServiceImpl implements DiscountService {
         }
 
         BigDecimal percentage = BigDecimal
-                .valueOf(rule.getDiscountPercentage())   // 0–100
+                .valueOf(rule.getDiscountPercentage())   
                 .divide(BigDecimal.valueOf(100));
 
         return total.multiply(percentage);

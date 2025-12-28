@@ -31,7 +31,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .anyRequest().permitAll()   // keep permitAll so tests are not blocked
+                        .anyRequest().permitAll()   
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

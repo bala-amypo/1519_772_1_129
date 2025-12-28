@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = new User();
         user.setEmail(email);
-        user.setPassword(password);   // plain for tests
+        user.setPassword(password);  
         user.setRole(role != null ? role : "ROLE_USER");
 
         userRepository.save(user);

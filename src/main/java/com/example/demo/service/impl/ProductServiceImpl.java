@@ -20,12 +20,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-        // SKU must be unique
+       
         if (productRepository.findBySku(product.getSku()).isPresent()) {
             throw new IllegalArgumentException("SKU already exists");
         }
 
-        // price must be positive
+  
         BigDecimal price = product.getPrice();
         if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Price must be positive");
