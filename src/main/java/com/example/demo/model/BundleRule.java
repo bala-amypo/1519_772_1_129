@@ -17,7 +17,7 @@ public class BundleRule {
     private String ruleName;
 
     @Column(nullable = false)
-    private String requiredProductIds; // CSV like "1,2,3"
+    private String requiredProductIds; 
 
     @Column(nullable = false)
     private Double discountPercentage;
@@ -25,7 +25,7 @@ public class BundleRule {
     @Column(nullable = false)
     private Boolean active = true;
 
-    /* ===== Getters and Setters ===== */
+
 
     public Long getId() {
         return id;

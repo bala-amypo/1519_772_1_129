@@ -19,7 +19,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // POST /auth/register
+    
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestParam String email,
                                          @RequestParam String password,
@@ -28,7 +28,6 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // POST /auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         AuthResponse response = authService.login(request);

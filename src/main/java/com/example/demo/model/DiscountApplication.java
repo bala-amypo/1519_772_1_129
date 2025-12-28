@@ -36,7 +36,7 @@ public class DiscountApplication {
         this.appliedAt = LocalDateTime.now();
     }
 
-    // ----- Getters and Setters -----
+ 
 
     public Long getId() {
         return id;
